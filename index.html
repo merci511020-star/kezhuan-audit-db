@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>科專查核 · 稽核代表知識庫</title>
+<style>
+/* ── 離線系統字型 Fallback（Windows / macOS / Linux 皆適用）── */
+@font-face { font-family:'Noto Sans TC'; font-weight:400 700; src:local('PingFang TC'),local('Microsoft JhengHei'),local('微軟正黑體'); }
+@font-face { font-family:'Noto Serif TC'; font-weight:400 700; src:local('Georgia'),local('PMingLiU'),local('新細明體'); }
+@font-face { font-family:'IBM Plex Mono'; font-weight:400 700; src:local('Consolas'),local('Courier New'),local('Monaco'); }
+</style>
+<style>
+/* ── 若使用者有網路，可選擇性載入 Google Fonts 以取得更佳字型 ── */
+/* 如需啟用請取消下方注解 */
+/*
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+*/
+</style>
+<style>
+:root {
+  --navy: #0F1F3D;
+  --navy-mid: #1B3A6B;
+  --navy-light: #2563AB;
+  --gold: #C8922A;
+  --gold-light: #F0C060;
+  --gold-pale: #FDF3DC;
+  --red: #B91C1C;
+  --red-pale: #FEF2F2;
+  --green: #15803D;
+  --green-pale: #F0FDF4;
+  --orange: #C2410C;
+  --orange-pale: #FFF7ED;
+  --teal: #0F766E;
+  --teal-pale: #F0FDFA;
+  --bg: #F5F3EE;
+  --surface: #FDFCF9;
+  --border: #DDD8CC;
+  --border-strong: #C4BDB0;
+  --text: #1A1714;
+  --text-2: #4A4540;
+  --text-3: #7A746C;
+  --radius: 6px;
+  --radius-lg: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--navy);
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 2px solid var(--gold);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 64px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--gold);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--navy);
+}
+
+.logo-text {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.logo-sub {
+  font-size: 11px;
+  color: var(--gold-light);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 400;
+}
+
+.header-search {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  max-width: 480px;
+}
+
+.header-search input {
+  flex: 1;
+  height: 38px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius);
+  padding: 0 12px;
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Noto Sans TC', sans-serif;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.header-search input::placeholder { color: rgba(255,255,255,0.4); }
+.header-search input:focus {
+  border-color: var(--gold-light);
+  background: rgba(255,255,255,0.12);
+}
+
+.btn-search {
+  height: 38px;
+  padding: 0 16px;
+  background: var(--gold);
+  border: none;
+  border-radius: var(--radius);
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.btn-search:hover { background: var(--gold-light); }
+
+.header-stats {
+  margin-left: auto;
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+
+.stat-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  color: var(--gold-light);
+  font-size: 14px;
+}
+
+/* ── LAYOUT ── */
+.main {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+  gap: 0;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  margin-bottom: 1.5rem;
+}
+
+.sidebar-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 8px;
+  padding-left: 4px;
+}
+
+.cat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-2);
+  font-family: 'Noto Sans TC', sans-serif;
+  transition: all 0.15s;
+  text-align: left;
+  margin-bottom: 2px;
+}
+
+.cat-btn:hover { background: var(--border); color: var(--text); }
+
+.cat-btn.active {
+  background: var(--navy);
+  color: #fff;
+}
+
+.cat-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  opacity: 0.6;
+  background: rgba(0,0,0,0.1);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.cat-btn.active .cat-count { background: rgba(255,255,255,0.15); opacity: 1; }
+
+.risk-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.risk-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-2);
+  font-family: 'Noto Sans TC', sans-serif;
+  transition: all 0.15s;
+  text-align: left;
+}
+
+.risk-btn:hover { background: var(--border); }
+.risk-btn.active { background: var(--border); font-weight: 500; color: var(--text); }
+
+.risk-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── CONTENT ── */
+.content {
+  flex: 1;
+  padding: 1.5rem;
+  min-width: 0;
+}
+
+.results-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.results-info {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.results-info strong { color: var(--text); }
+
+.sort-select {
+  font-size: 12px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  font-family: 'Noto Sans TC', sans-serif;
+  outline: none;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.card:hover { border-color: var(--border-strong); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.card.open .card-head { border-bottom: 1px solid var(--border); }
+
+.risk-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.risk-high { background: #FEE2E2; color: #991B1B; }
+.risk-mid  { background: #FFEDD5; color: #9A3412; }
+.risk-low  { background: #DCFCE7; color: #166534; }
+.risk-info { background: #DBEAFE; color: #1E40AF; }
+
+.cat-chip {
+  font-size: 11px;
+  color: var(--text-3);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-q {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  min-width: 0;
+}
+
+.card-q mark {
+  background: #FEF08A;
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.chevron {
+  font-size: 18px;
+  color: var(--text-3);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.card.open .chevron { transform: rotate(180deg); }
+
+.card-body {
+  display: none;
+}
+
+.card.open .card-body { display: block; }
+
+.body-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.body-col {
+  padding: 14px 16px;
+}
+
+.body-col:first-child { border-right: 1px solid var(--border); }
+
+.col-lbl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.lbl-good { color: var(--green); }
+.lbl-bad { color: var(--red); }
+
+.col-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.icon-good { background: var(--green); color: #fff; }
+.icon-bad { background: var(--red); color: #fff; }
+
+.col-text {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.col-text.bad { color: #7C2D12; }
+
+.tip-row {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.tip-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.tip-icon.blue { background: var(--navy-light); color: #fff; }
+.tip-icon.red { background: var(--red); color: #fff; }
+.tip-icon.green { background: var(--green); color: #fff; }
+
+.tip-content { flex: 1; }
+
+.tip-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 4px;
+}
+
+.tip-text {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--text-2);
+}
+
+.tip-text mark {
+  background: #FEF08A;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* ── EMPTY ── */
+.empty {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-3);
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 1rem;
+  opacity: 0.3;
+}
+
+.empty-text { font-size: 15px; margin-bottom: 0.5rem; color: var(--text-2); }
+.empty-sub { font-size: 13px; }
+
+/* ── QUICK TAGS (mobile / below header) ── */
+.quick-tags {
+  display: none;
+  gap: 6px;
+  padding: 10px 1rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.qtag {
+  white-space: nowrap;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.qtag:hover, .qtag.active {
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
+}
+
+/* ── PRINCIPLE BANNER ── */
+.principle-banner {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.principle-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--gold);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.principle-text { flex: 1; }
+
+.principle-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.principle-desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.5;
+}
+
+.three-pills {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.three-pill {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 5px 11px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.85);
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.three-pill .pill-step {
+  font-size: 9px;
+  color: var(--gold-light);
+  display: block;
+  letter-spacing: 0.04em;
+  margin-bottom: 1px;
+}
+
+.three-pill-arrow {
+  color: var(--gold-light);
+  font-size: 12px;
+  padding: 0 4px;
+  opacity: 0.7;
+}
+
+/* ── VIEW TOGGLE ── */
+.view-toggle { display:flex; gap:6px; margin-bottom:1.2rem; }
+.vtab { padding:7px 20px; border-radius:var(--radius); border:1.5px solid var(--border); background:var(--surface); cursor:pointer; font-size:13px; font-family:'Noto Sans TC',sans-serif; font-weight:500; color:var(--text-2); transition:all 0.15s; }
+.vtab:hover { border-color:var(--border-strong); color:var(--text); }
+.vtab.active { background:var(--navy); border-color:var(--navy); color:#fff; }
+
+/* ── YEAR BUTTONS ── */
+.year-btn { display:flex; align-items:center; justify-content:space-between; width:100%; padding:7px 10px; border-radius:var(--radius); border:none; background:transparent; cursor:pointer; font-size:13px; color:var(--text-2); font-family:'Noto Sans TC',sans-serif; transition:all 0.15s; margin-bottom:2px; }
+.year-btn:hover { background:var(--border); color:var(--text); }
+.year-btn.active { background:var(--navy); color:#fff; }
+.year-btn.active .cat-count { background:rgba(255,255,255,0.15); opacity:1; }
+
+/* ── HISTORY CARDS ── */
+.hist-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); margin-bottom:8px; padding:14px 16px; transition:border-color 0.15s, box-shadow 0.15s; }
+.hist-card:hover { border-color:var(--border-strong); box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+.hist-head { display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:8px; }
+.year-badge { font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; padding:3px 9px; border-radius:4px; background:var(--navy); color:#fff; flex-shrink:0; }
+.hist-type { font-size:11px; color:var(--text-3); background:var(--bg); border:1px solid var(--border); padding:2px 8px; border-radius:4px; flex-shrink:0; }
+.penalty-badge { font-size:11px; font-weight:700; padding:2px 8px; border-radius:4px; flex-shrink:0; }
+.penalty-yes { background:#FEE2E2; color:#991B1B; }
+.penalty-warn { background:#FFEDD5; color:#9A3412; }
+.repeat-badge { font-size:10px; padding:2px 7px; border-radius:4px; background:#FEF3C7; color:#92400E; font-weight:700; flex-shrink:0; }
+.hist-unit { font-size:12px; color:var(--text-3); margin-left:auto; flex-shrink:0; font-style:italic; }
+.hist-text { font-size:13.5px; line-height:1.75; color:var(--text); }
+.hist-text mark { background:#FEF08A; border-radius:2px; padding:0 1px; }
+.hist-basis { margin-top:6px; font-size:11.5px; color:var(--text-3); font-family:'IBM Plex Mono',monospace; }
+.hist-note { font-size:12px; color:var(--teal); margin-top:4px; }
+.year-divider { margin:24px 0 10px; }
+.year-divider-label { font-family:'Noto Serif TC',serif; font-size:14px; font-weight:700; color:var(--navy); letter-spacing:0.05em; background:var(--bg); padding-right:12px; }
+.year-divider hr { border:none; border-top:2px solid var(--border); margin-top:8px; }
+
+/* ── HTYPE FILTER ── */
+.htype-filter { display:flex; flex-direction:column; gap:3px; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 11px;
+  color: var(--text-3);
+  border-top: 1px solid var(--border);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .quick-tags { display: flex; }
+  .header-stats { display: none; }
+  .header-search { max-width: none; }
+  .body-cols { grid-template-columns: 1fr; }
+  .body-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+  .three-pills { display: none; }
+  .principle-banner { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">稽</div>
+      <div>
+        <div class="logo-text">科專查核知識庫</div>
+        <div class="logo-sub">稽核代表教戰手冊 · 115年度版</div>
+      </div>
+    </a>
+    <div class="header-search">
+      <input type="text" id="searchInput" placeholder="輸入關鍵字…年底、工時、維護費、報價單…" />
+      <button class="btn-search" onclick="doSearch()">搜尋</button>
+    </div>
+    <div class="header-stats">
+      <div class="stat-pill"><span class="stat-num" id="statTotal">20</span> 筆資料</div>
+      <div class="stat-pill"><span class="stat-num" id="statHigh">10</span> 高風險</div>
+    </div>
+  </div>
+</header>
+
+<!-- QUICK TAGS (mobile) -->
+<div class="quick-tags" id="quickTags"></div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section" id="catSection">
+      <div class="sidebar-label">分類篩選</div>
+      <div id="catList"></div>
+    </div>
+    <div class="sidebar-section" id="riskSection">
+      <div class="sidebar-label">風險等級</div>
+      <div class="risk-filter" id="riskList"></div>
+    </div>
+    <div class="sidebar-section" id="yearSection" style="display:none">
+      <div class="sidebar-label">年度篩選</div>
+      <div id="yearList"></div>
+    </div>
+    <div class="sidebar-section" id="htypeSection" style="display:none">
+      <div class="sidebar-label">缺失類型</div>
+      <div class="htype-filter" id="htypeList"></div>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+    <!-- VIEW TOGGLE -->
+    <div class="view-toggle">
+      <button class="vtab active" id="vtab-qa" onclick="setView('qa')">📋 115年度查核知識庫</button>
+      <button class="vtab" id="vtab-history" onclick="setView('history')">📅 歷年管理缺失</button>
+    </div>
+
+    <div class="principle-banner">
+      <div class="principle-icon">⚖️</div>
+      <div class="principle-text">
+        <div class="principle-title">查核攻防流程：從問題提出到最終認定</div>
+        <div class="principle-desc">查核員提出問題 → 我方蒐集有利佐證回應 → 對方核駁補問 → 我方再補強說明 → 雙方協商收斂 → 最終認定結果。本庫所列「建議說法」為歷經攻防後、最具說服力的收斂應答。</div>
+      </div>
+      <div class="three-pills">
+        <div class="three-pill"><span class="pill-step">STEP 1</span>查核員提問</div>
+        <span class="three-pill-arrow">→</span>
+        <div class="three-pill"><span class="pill-step">STEP 2</span>我方蒐證回應</div>
+        <span class="three-pill-arrow">⇄</span>
+        <div class="three-pill"><span class="pill-step">STEP 3</span>雙方攻防核駁</div>
+        <span class="three-pill-arrow">→</span>
+        <div class="three-pill"><span class="pill-step">STEP 4</span>最終認定結果</div>
+      </div>
+    </div>
+
+    <div class="results-bar">
+      <div class="results-info" id="resultsInfo">載入中…</div>
+      <select class="sort-select" id="sortSelect" onchange="render()">
+        <option value="risk">依風險排序</option>
+        <option value="cat">依分類排序</option>
+        <option value="id">依編號排序</option>
+      </select>
+    </div>
+
+    <div id="results"></div>
+    <div id="histResults" style="display:none"></div>
+  </main>
+</div>
+
+<footer class="footer">
+  科專查核稽核代表知識庫 · 115年度版 · 機密文件請勿外傳
+</footer>
+
+<script>
+const DB = [
+  { id:1, risk:"high", cat:"資料程序", q:"年底集中核銷",
+    keys:["年底","集中","核銷","材料費","採購","時程","大量"],
+    good:"「本案因計畫執行需求及採購特性，部分為客製化項目，採分批採購並於年底完成驗收，因此集中核銷。後續也會再強化採購時程規劃，避免類似情形。」",
+    bad:"「因為大家年底才有空」\n「這是慣例」",
+    tip:"FY114真實案例：年底集中核銷13,210,759元（8筆10月前請購）。需說明計畫特性，並強調每月定期會議管控、PM財會協助提醒機制。",tipType:"blue"},
+
+  { id:2, risk:"high", cat:"資料程序", q:"無報價單 / 無外部佐證",
+    keys:["報價單","佐證","議價","外部","採購","文件","軟體","留存","憑證"],
+    good:"「本案係透過議價方式進行採購，相關溝通紀錄已有留存（如email等），未來將補強外部報價文件留存，以符合查核要求。」",
+    bad:"「我們覺得價格合理就買了」\n「長官同意就沒有留資料」",
+    tip:"FY114案例：軟體購置憑證未載明使用日期、未留外部報價。對策：本件已依規完成採購，收驗單有載明使用期限，外部文件依規保存。",tipType:"blue"},
+
+  { id:3, risk:"high", cat:"資料程序", q:"非公設場地未事先報核",
+    keys:["場地","非公設","報核","報部","核准","會議","接待費","申請"],
+    good:"「本案因時程緊急且公設場地無法符合會議規模需求，故採非公設場地辦理；後續會補強事前報部程序與書面紀錄。」",
+    bad:"「臨時決定」\n「沒有想到要報」",
+    tip:"FY114案例：支用非公設場地會議接待費71,885元，未報部核准，應減列退繳。說明原因須強調「時間緊迫」，並承諾改善事前申請機制。",tipType:"red"},
+
+  { id:4, risk:"low", cat:"資料程序", q:"文件名稱誤植（贊助 vs 協辦）",
+    keys:["贊助","協辦","誤植","文件","名稱","簽呈","性質","寫錯"],
+    good:"「本案實質為協辦性質，內部文件用語誤植，未來將加強文件填列與審核機制，確保與實際交易一致。」",
+    bad:"「只是寫錯而已」\n「這沒有差」",
+    tip:"FY114案例：簽呈寫「贊助」實為「協辦」。強調：贊助費用係為誤載，本院確為協辦性質，後續將加強宣導依交易事實準確填述。",tipType:"blue"},
+
+  { id:5, risk:"high", cat:"費用一致性", q:"工時與報支計畫不一致",
+    keys:["工時","報支","計畫","不一致","跨計畫","填報","費用","歸屬"],
+    good:"「同仁實際有跨計畫支援情形，本案費用歸屬有調整，但確實未完全反映於工時紀錄，後續將強化一致性控管。」",
+    bad:"「差不多就好」\n「這是會計那邊的事」",
+    tip:"FY114案例：A同仁跨計畫支援有實際貢獻；B同仁訓練在計畫執行前，對計畫有實際貢獻。重點：需具體說明兩人對計畫的「實際貢獻」。",tipType:"blue"},
+
+  { id:6, risk:"mid", cat:"費用一致性", q:"設備使用紀錄與維護費不一致",
+    keys:["設備","使用紀錄","維護費","不一致","計畫別","分攤","時數","跨計畫"],
+    good:"「該設備確有跨計畫使用情形，當時未依使用比例分攤，後續會依實際使用時數進行合理分攤。」",
+    bad:"「就是這樣填的」\n「以前都這樣做」",
+    tip:"FY114案例：設備維護費1,417,500元，發現非科專計畫亦有使用，依時數重算應減列29,841元退繳。對策：配合查核辦理費用繳回。",tipType:"red"},
+
+  { id:7, risk:"mid", cat:"費用一致性", q:"訓練費與工時計畫不一致",
+    keys:["訓練費","訓練","工時","計畫","不一致","跨計畫","支援"],
+    good:"「同仁參與訓練係為支援相關計畫，但工時填報與費用歸屬未完全一致，後續會建立一致填報機制。」",
+    bad:"「訓練跟計畫沒有直接關係」",
+    tip:"關鍵說法：須說明訓練對計畫的「實際關聯性」，不能讓查核員認為費用與計畫無關，否則極易列缺失。",tipType:"blue"},
+
+  { id:8, risk:"high", cat:"財務合理性", q:"費用科目分類錯誤（報名費列旅運費）",
+    keys:["費用","科目","分類","錯誤","報名費","旅運費","憑證","拆分","業務費"],
+    good:"「本案因憑證未拆分，導致費用分類不夠精確，後續將依憑證性質正確分類並加強審核。」",
+    bad:"「報名費也算旅費啊」\n「都差不多」",
+    tip:"FY114案例：旅運費含住宿費及報名費未拆分，報名費應列業務費，依憑證原則應減列退繳10,000元。對策：依重要性原則說明實質支付內容。",tipType:"red"},
+
+  { id:9, risk:"mid", cat:"財務合理性", q:"維護費未合理分攤",
+    keys:["維護費","分攤","比例","跨計畫","合理","使用時數","設備"],
+    good:"「該設備同時支應多項計畫，當時未依實際使用比例分攤，後續將依查核建議調整分攤方式。」",
+    bad:"「分攤很麻煩，就全部放這個計畫」",
+    tip:"應對重點：承認未依比例分攤，說明後續將一律按設備使用計畫分攤，已配合查核結果辦理費用繳回。",tipType:"blue"},
+
+  { id:10, risk:"high", cat:"計畫管理", q:"計畫變更未先送法科辦公室",
+    keys:["計畫變更","法科","法科辦","流程","送件","函文","程序","公文"],
+    good:"「本案因時程壓力優先處理對外送件，未完全符合既定流程，後續會確實依規定先送法科辦公室再行發文。」",
+    bad:"「沒有時間走流程」\n「上面說先發就先發了」",
+    tip:"FY114案例：計畫變更因9月下旬辦理，時程緊迫，逕發函至經濟部。對策：持續檢討並強化相關作業流程，重新檢視系統功能、強化發函作業。",tipType:"blue"},
+
+  { id:11, risk:"mid", cat:"計畫管理", q:"計畫執行經費控管不佳",
+    keys:["經費","控管","差異","預算","交接","管理","不佳"],
+    good:"「本案因人員交接與執行過程調整，造成預估與實際數差異，後續將強化預算控管與交接機制。」",
+    bad:"「計畫本來就會有變化」\n「控管是財會的責任」",
+    tip:"FY114案例：計畫原編列22,440千元，辦理經費盤點時發現初估金額未納入管理費及其他必要費用，後強化計畫經費檢視及人員交接流程管理。",tipType:"blue"},
+
+  { id:12, risk:"mid", cat:"計畫管理", q:"未催收授權金",
+    keys:["授權金","催收","契約","收入","違約金","追蹤","廠商"],
+    good:"「已有依契約進行催收，相關紀錄可提供，未來會在合約中明確訂定違約金及催收機制以強化管理。」",
+    bad:"「對方一直沒回我們」\n「不知道有這個規定」",
+    tip:"對策重點：主動提供催收紀錄，強調已依契約辦理，並說明未來在合約中強化違約追蹤條款，以維護雙方權益。",tipType:"blue"},
+
+  { id:13, risk:"high", cat:"計畫管理", q:"計畫查核點規劃與實際執行不符",
+    keys:["查核點","規劃","實際執行","分包","結案","審查","汰劣","績效"],
+    good:"「114年度首次採行隨到隨審機制，各案執行期程及結束日期有所差異，後續已改採「汰劣擇優」原則，並增列結案審查及減價驗收機制，已獲經濟部核定。」",
+    bad:"「分包就是這樣做的」\n「不清楚有這個規定」",
+    tip:"此題為FY114建議事項（非缺失）屬高風險議題。強調制度改進：已採汰劣擇優原則，加強內部教育訓練提升案件品質。",tipType:"blue"},
+
+  { id:14, risk:"mid", cat:"年度管理", q:"研究紀錄簿未每月查閱",
+    keys:["研究紀錄簿","紀錄簿","查閱","直屬主管","月查","填寫","更新"],
+    good:"「直屬主管已於10月始查閱同仁8月之研究紀錄簿，由於研究紀錄簿重更工具且為管理重點，後續將加強宣導依照實際查閱情況同時更新系統。」",
+    bad:"「太忙沒有時間看」\n「同仁自己管就好」",
+    tip:"對策：強調研究紀錄簿重要性，後續將加強宣導，並使系統資料與實際查閱情況一致，以利資料正確性及管理。",tipType:"blue"},
+
+  { id:15, risk:"mid", cat:"年度管理", q:"出差申請未預先取得直屬主管核准",
+    keys:["出差","申請","核准","直屬主管","事前","行程","事先"],
+    good:"「為管理計畫人員避免非必要之出差，建議檢討改善，增修事前告知形式，以利於直屬主管事前核准，已由表單系統管控，並修訂相關業管規範。」",
+    bad:"「出差很急來不及報核」\n「口頭說一下就好」",
+    tip:"對策：已由表單系統管控，並修訂相關業管規範，確保未來出差申請均完成事前核准程序。",tipType:"blue"},
+
+  { id:16, risk:"mid", cat:"年度管理", q:"私車公用無里程記錄佐證",
+    keys:["私車","公用","里程","佐證","里程數","汽車","報支","起迄"],
+    good:"「同仁使用自有汽車出差之出差銷冊中出差地點不為單一地點，並未提供相關里程數佐證；工研院已著手進行自有汽車里程記錄方式，並已於114年1月1日開始實施。」",
+    bad:"「里程差不多就這樣填」\n「一直都是這樣報的」",
+    tip:"對策：114年1月1日起已實施新制度，要求以便捷方式記錄私車公用里程數，並提供詳細起迄地點明細。",tipType:"blue"},
+
+  { id:17, risk:"high", cat:"函文帳戶", q:"季報函文帳號 / 帳戶名稱誤植",
+    keys:["季報","函文","帳號","帳戶","名稱","誤植","錯誤","漏填","缺漏"],
+    good:"「本院於補請款作業依原計畫既有請款流程，自既有帳戶資訊帶入，發生帳戶資料誤植；後續本院將強化檢核與系統提醒機制，避免類似情形再次發生。」",
+    bad:"「輸入錯誤啊沒辦法」\n「已經發出去了」",
+    tip:"FY114案例：工作季報請款帳號名稱缺漏、撥款函文單位帳戶名稱誤植。強化：後續本院將強化系統提醒，建立帳戶自動帶入機制及即時警示。",tipType:"red"},
+
+  { id:18, risk:"high", cat:"應答原則", q:"前後說法不一致",
+    keys:["不一致","說法","前後","改口","補充","確認","事實","前後矛盾"],
+    good:"「經內部進一步確認背景資料後，補充說明完整事實，確保本次提供的資訊為最正確版本。」",
+    bad:"「因為之前搞錯了」\n「那個人說的不算」",
+    tip:"這是最危險的情境！查核員認定說法不一致=重大缺失。對策：用「補充說明」而非「更改說法」，強調「進一步確認後」是正確版本。",tipType:"red"},
+
+  { id:19, risk:"info", cat:"應答原則", q:"通用保命句（答不上來時使用）",
+    keys:["不確定","無法回答","不知道","保命","通用","補充","帶回","現場"],
+    good:"「這部分我們會再補充完整資料說明，目前先就已掌握情況回覆，後續會依查核意見精進。」",
+    bad:"「我不知道」\n「這個不是我負責的」",
+    tip:"記住：查核不是即問即答，可以帶回確認。說「帶回補充」比隨便猜答安全100倍。",tipType:"green"},
+
+  { id:20, risk:"info", cat:"應答原則", q:"三段式應答心法（所有題型適用）",
+    keys:["心法","三段","原因","承認","改善","架構","公式","話術","鐵則","不辯解","誠實"],
+    good:"① 說「客觀原因」：計畫特性 / 時程限制 / 制度不足\n② 承「確實不足」：確實有這樣情形 / 未盡理想\n③ 提「具體改善」：後續將調整 / 強化機制 / 建立制度",
+    bad:"「這不是我們的問題」\n「一直都是這樣做」\n「應該沒關係吧」",
+    tip:"黃金口訣：誠實說明現況 ＋ 解釋合理原因 ＋ 提出改善措施 = 安全過關。不辯解、不推責、不主觀判斷。",tipType:"green"},
+];
+
+const CATS = ["全部","資料程序","費用一致性","財務合理性","計畫管理","年度管理","函文帳戶","應答原則"];
+const RISKS = [
+  { key:"all", label:"全部風險", dot:"#9CA3AF" },
+  { key:"high", label:"高風險", dot:"#DC2626" },
+  { key:"mid", label:"中風險", dot:"#EA580C" },
+  { key:"low", label:"一般", dot:"#16A34A" },
+  { key:"info", label:"必知原則", dot:"#2563AB" },
+];
+
+let activeCat = "全部";
+let activeRisk = "all";
+let query = "";
+
+function esc(s) { return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+function hl(text, q) {
+  if (!q) return esc(text);
+  const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  return esc(text).replace(re, m => `<mark>${m}</mark>`);
+}
+
+function score(item) {
+  if (activeCat !== "全部" && item.cat !== activeCat) return -1;
+  if (activeRisk !== "all" && item.risk !== activeRisk) return -1;
+  if (!query) return 1;
+  const q = query.toLowerCase();
+  const matchKey = item.keys.some(k => k.includes(q) || q.includes(k));
+  const matchText = [item.q, item.good, item.bad, item.tip].some(s => s && s.toLowerCase().includes(q));
+  return (matchKey || matchText) ? 1 : -1;
+}
+
+function sortItems(items) {
+  const s = document.getElementById('sortSelect').value;
+  if (s === "risk") {
+    const order = { high:0, mid:1, low:2, info:3 };
+    return [...items].sort((a, b) => (order[a.risk]||99) - (order[b.risk]||99));
+  }
+  if (s === "cat") return [...items].sort((a, b) => a.cat.localeCompare(b.cat));
+  return [...items].sort((a, b) => a.id - b.id);
+}
+
+function riskInfo(r) {
+  if (r === "high") return { cls:"risk-high", label:"高風險" };
+  if (r === "mid") return  { cls:"risk-mid",  label:"中風險" };
+  if (r === "info") return { cls:"risk-info", label:"必知原則" };
+  return { cls:"risk-low", label:"一般" };
+}
+
+function buildSidebar() {
+  const cl = document.getElementById('catList');
+  cl.innerHTML = CATS.map(c => {
+    const cnt = c === "全部" ? DB.length : DB.filter(d => d.cat === c).length;
+    return `<button class="cat-btn${c===activeCat?' active':''}" onclick="setCat('${c}')">${c}<span class="cat-count">${cnt}</span></button>`;
+  }).join('');
+
+  const rl = document.getElementById('riskList');
+  rl.innerHTML = RISKS.map(r =>
+    `<button class="risk-btn${r.key===activeRisk?' active':''}" onclick="setRisk('${r.key}')">
+      <span class="risk-dot" style="background:${r.dot}"></span>${r.label}
+    </button>`
+  ).join('');
+
+  const qt = document.getElementById('quickTags');
+  qt.innerHTML = CATS.map(c =>
+    `<span class="qtag${c===activeCat?' active':''}" onclick="setCat('${c}')">${c}</span>`
+  ).join('');
+}
+
+function setCat(c) { activeCat = c; buildSidebar(); render(); }
+function setRisk(r) { activeRisk = r; buildSidebar(); render(); }
+function doSearch() {
+  query = document.getElementById('searchInput').value.trim();
+  if (activeView === 'history') renderHistory();
+  else render();
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+document.getElementById('searchInput').addEventListener('input', e => {
+  if (e.target.value === '') {
+    query = '';
+    if (activeView === 'history') renderHistory();
+    else render();
+  }
+});
+
+function render() {
+  const matches = sortItems(DB.filter(it => score(it) > 0));
+  const q2 = query;
+
+  document.getElementById('statTotal').textContent = DB.length;
+  document.getElementById('statHigh').textContent = DB.filter(d => d.risk === 'high').length;
+
+  const info = document.getElementById('resultsInfo');
+  info.innerHTML = q2 || activeCat !== "全部" || activeRisk !== "all"
+    ? `找到 <strong>${matches.length}</strong> 筆相關內容`
+    : `顯示全部 <strong>${matches.length}</strong> 筆知識庫資料`;
+
+  const res = document.getElementById('results');
+  if (!matches.length) {
+    res.innerHTML = `<div class="empty">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-text">找不到相關內容</div>
+      <div class="empty-sub">請嘗試其他關鍵字，或清除篩選條件</div>
+    </div>`;
+    return;
+  }
+
+  res.innerHTML = matches.map(item => {
+    const ri = riskInfo(item.risk);
+    const goodFmt = hl(item.good, q2).replace(/\n/g, '<br>');
+    const badFmt = hl(item.bad, q2).replace(/\n/g, '<br>');
+    const tipFmt = item.tip ? hl(item.tip, q2) : '';
+    const tipRow = tipFmt ? `
+      <div class="tip-row">
+        <div class="tip-icon ${item.tipType}" aria-hidden="true">案</div>
+        <div class="tip-content">
+          <div class="tip-label">真實案例 / 應對要點</div>
+          <div class="tip-text">${tipFmt}</div>
+        </div>
+      </div>` : '';
+
+    return `<div class="card" id="card-${item.id}">
+      <div class="card-head" onclick="toggle(${item.id})">
+        <span class="risk-tag ${ri.cls}">${ri.label}</span>
+        <span class="cat-chip">${item.cat}</span>
+        <span class="card-q">${hl(item.q, q2)}</span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </div>
+      <div class="card-body">
+        <div class="body-cols">
+          <div class="body-col">
+            <div class="col-lbl lbl-good"><span class="col-icon icon-good" aria-hidden="true">✓</span>建議說法</div>
+            <div class="col-text">${goodFmt}</div>
+          </div>
+          <div class="body-col">
+            <div class="col-lbl lbl-bad"><span class="col-icon icon-bad" aria-hidden="true">✕</span>地雷話術</div>
+            <div class="col-text bad">${badFmt}</div>
+          </div>
+        </div>
+        ${tipRow}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggle(id) {
+  const card = document.getElementById('card-' + id);
+  card.classList.toggle('open');
+}
+
+buildSidebar();
+render();
+
+// ═══════════════════════════════════════════════════════
+//  歷年管理缺失資料庫 HIST_DB
+// ═══════════════════════════════════════════════════════
+const HIST_DB = [
+// ─── 114年度 (34筆) ───────────────────────────────────
+{id:"h114_1",year:114,no:1,unit:"(通案)",type:"研究紀錄",risk:"mid",
+ deficiency:"研究紀錄簿未依據單位研究紀錄簿及管理要點之規定撰寫，如每月撰寫次數、主管查閱頻率、計畫代號未填寫、見證人未用印等。",
+ basis:"第4-6項",penalty:null,repeat:false,notes:""},
+{id:"h114_2",year:114,no:2,unit:"(通案)",type:"工時填報",risk:"high",
+ deficiency:"單位工時調整誤植時數，導致該月份工時合計數超過該月實際工作總時數。",
+ basis:"第4-3項",penalty:null,repeat:false,notes:""},
+{id:"h114_3",year:114,no:3,unit:"(通案)",type:"費用核銷",risk:"mid",
+ deficiency:"單位報支專業服務費，逾原訂付款期限七個月後才進行付款，實際付款時間與核銷入帳時間過久。",
+ basis:"第4-3項",penalty:null,repeat:false,notes:""},
+{id:"h114_4",year:114,no:4,unit:"(通案)",type:"採購程序",risk:"high",
+ deficiency:"計畫屆期前集中採買超過合理預估之耗材使用量。",
+ basis:"第4-1項",penalty:null,repeat:false,notes:""},
+{id:"h114_5",year:114,no:5,unit:"(通案)",type:"採購程序",risk:"high",
+ deficiency:"請購報價單及發票日期早於請購日期（先購後補件，程序倒置）。",
+ basis:"第4-1項",penalty:null,repeat:false,notes:""},
+{id:"h114_6",year:114,no:6,unit:"(通案)",type:"費用核銷",risk:"mid",
+ deficiency:"支出憑證黏存單單據作業缺失：(1)單據塗改且未註明原因；(2)人員簽名日期缺漏；(3)發票未有明確數量、單價、品名；(4)人員蓋章年度錯誤。",
+ basis:"第4-3項",penalty:null,repeat:false,notes:""},
+{id:"h114_7",year:114,no:7,unit:"(通案)",type:"差旅費用",risk:"high",
+ deficiency:"旅運費列報計畫與工時列報計畫不相符。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:"FY114真實案例：8,210,759元集中核銷"},
+{id:"h114_8",year:114,no:8,unit:"(通案)",type:"費用核銷",risk:"mid",
+ deficiency:"業務費列支非屬科專計畫應負擔之推廣費用。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h114_9",year:114,no:9,unit:"(通案)",type:"設備管理",risk:"high",
+ deficiency:"維護費列報於非實際使用設備之計畫（計畫別錯誤）。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:"FY114案例：維護費1,417,500元，依時數重算應減列29,841元"},
+{id:"h114_10",year:114,no:10,unit:"(通案)",type:"採購程序",risk:"high",
+ deficiency:"軟體採購報核憑證附件未有外部報價單，且使用資訊未完整（未載明使用日期）。",
+ basis:"第4-1項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h114_11",year:114,no:11,unit:"(通案)",type:"函文程序",risk:"high",
+ deficiency:"使用非公設場地辦理會議/活動，未事先報部核准即支用場地費。",
+ basis:"第4-9項",penalty:"減列退繳",repeat:false,notes:"FY114案例：非公設場地會議接待費71,885元，應減列退繳"},
+{id:"h114_12",year:114,no:12,unit:"(通案)",type:"費用核銷",risk:"mid",
+ deficiency:"單據核銷科目名稱與實際用途不一致（如贊助費誤植為協辦費）。",
+ basis:"第4-3項",penalty:null,repeat:false,notes:""},
+{id:"h114_13",year:114,no:13,unit:"(通案)",type:"差旅費用",risk:"high",
+ deficiency:"旅運費列支住宿費及報名費（報名費應列業務費，未依憑證性質拆分科目）。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:"FY114案例：報名費10,000元應減列退繳"},
+{id:"h114_14",year:114,no:14,unit:"(通案)",type:"工時填報",risk:"high",
+ deficiency:"訓練費列報計畫與工時列報計畫不一致（受訓期間工時歸屬與訓練費歸屬計畫不同）。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h114_15",year:114,no:15,unit:"(通案)",type:"設備管理",risk:"high",
+ deficiency:"維護費未合理分攤列報於實際使用設備之計畫，未依使用時數分攤，應重算繳回。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h114_16",year:114,no:16,unit:"(通案)",type:"函文程序",risk:"high",
+ deficiency:"補請款公文撥款帳戶錯誤（帳號/帳戶名稱誤植）。",
+ basis:"第4-6項",penalty:null,repeat:false,notes:""},
+{id:"h114_17",year:114,no:17,unit:"(通案)",type:"函文程序",risk:"high",
+ deficiency:"工作季報撥款函文單位帳戶名稱誤植。",
+ basis:"第4-6項",penalty:null,repeat:false,notes:""},
+{id:"h114_18",year:114,no:18,unit:"(通案)",type:"函文程序",risk:"high",
+ deficiency:"未符合09603469750號函規定，計畫變更函文未先送法科辦公室，直接函送經濟部。",
+ basis:"第4-9項",penalty:null,repeat:false,notes:""},
+{id:"h114_19",year:114,no:19,unit:"(通案)",type:"計畫管理",risk:"high",
+ deficiency:"計畫未妥善執行且經費控管不佳（預算差異未及時調整、交接機制不足）。",
+ basis:"第4-9項",penalty:null,repeat:false,notes:""},
+{id:"h114_20",year:114,no:20,unit:"(通案)",type:"計畫管理",risk:"high",
+ deficiency:"計畫執行未確實管理計畫分包作業及相關決議辦理事宜。",
+ basis:"第4-9項",penalty:null,repeat:false,notes:""},
+{id:"h114_21",year:114,no:21,unit:"(通案)",type:"計畫管理",risk:"mid",
+ deficiency:"活動辦理未能妥適溝通及適時修正（行政協調不足）。",
+ basis:"第4-9項",penalty:null,repeat:false,notes:""},
+{id:"h114_22",year:114,no:22,unit:"(通案)",type:"函文程序",risk:"high",
+ deficiency:"季報及請款函文內容誤植（金額、期別等資訊填寫錯誤）。",
+ basis:"第4-6項",penalty:null,repeat:false,notes:""},
+{id:"h114_23",year:114,no:23,unit:"(通案)",type:"計畫管理",risk:"mid",
+ deficiency:"活動辦理與行政溝通未妥善。",
+ basis:"第4-9項",penalty:null,repeat:false,notes:""},
+{id:"h114_24",year:114,no:24,unit:"(通案)",type:"計畫管理",risk:"high",
+ deficiency:"計畫查核點規劃申請數與實際執行情形未符（建議事項）：首次採隨到隨審機制，各案執行期程有差異。",
+ basis:"第4-9項",penalty:null,repeat:false,notes:"已改採汰劣擇優原則並增列結案審查及減價驗收機制，獲經濟部核定"},
+{id:"h114_25",year:114,no:25,unit:"(通案)",type:"工時填報",risk:"mid",
+ deficiency:"旅運費報支單及加班單，填報計畫工時代號不一致。",
+ basis:"第4-3項",penalty:null,repeat:false,notes:""},
+{id:"h114_26",year:114,no:26,unit:"(通案)",type:"財產管理",risk:"low",
+ deficiency:"國有財產報廢方式不符單位內部規定。",
+ basis:"第4-2項",penalty:null,repeat:false,notes:""},
+{id:"h114_27",year:114,no:27,unit:"(通案)",type:"設備管理",risk:"mid",
+ deficiency:"設備使用紀錄表未確實依單位規定填寫（未填使用時數、使用人與差勤紀錄不符）。",
+ basis:"第4-6項",penalty:null,repeat:false,notes:""},
+{id:"h114_28",year:114,no:28,unit:"(通案)",type:"費用核銷",risk:"mid",
+ deficiency:"跨年度費用未依年度使用期間分攤（應分年列報之費用全數計入同一年度）。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h114_29",year:114,no:29,unit:"(通案)",type:"工時填報",risk:"high",
+ deficiency:"訓練費列報計畫與工時列報計畫不相符。",
+ basis:"第4-3項",penalty:null,repeat:false,notes:""},
+{id:"h114_30",year:114,no:30,unit:"(通案)",type:"採購程序",risk:"mid",
+ deficiency:"購置物品未依據單位自訂採購作業規定辦理，且憑證簽核人員與規定程序不符。",
+ basis:"第4-1項",penalty:null,repeat:false,notes:""},
+{id:"h114_31",year:114,no:31,unit:"(通案)",type:"設備管理",risk:"mid",
+ deficiency:"書面審查意見未填寫日期，且維護費用分攤未有合理分攤機制。",
+ basis:"第4-9項",penalty:null,repeat:false,notes:""},
+{id:"h114_32",year:114,no:32,unit:"(通案)",type:"差旅費用",risk:"high",
+ deficiency:"旅運費列支非屬計畫人員費用，且工時列報計畫與旅運費列報計畫不符，應減列退繳。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h114_33",year:114,no:33,unit:"(通案)",type:"計畫管理",risk:"mid",
+ deficiency:"未配合指示妥適規劃執行（計畫執行方向與主管機關指示不符）。",
+ basis:"第4-9項",penalty:null,repeat:false,notes:""},
+{id:"h114_34",year:114,no:34,unit:"(通案)",type:"函文程序",risk:"mid",
+ deficiency:"114年12月會計月報未於契約規定時限內送達。",
+ basis:"第4-6項",penalty:null,repeat:false,notes:""},
+
+// ─── 112年度 ─────────────────────────────────
+{id:"h112_1",year:112,no:1,unit:"金屬中心",type:"費用核銷",risk:"low",
+ deficiency:"驗收人未填寫驗收日期；付款方式欄位未勾選（表單欄位填寫不完整）。",
+ basis:"第4-10項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_2",year:112,no:2,unit:"金屬中心",type:"採購程序",risk:"high",
+ deficiency:"緊急採購未依規定於5日內補填申購單；驗收文件有誤。累犯（108年核減0.5%，111年核減1%，累計扣減3.1%）。",
+ basis:"第4-1項",penalty:"3.1%",repeat:true,notes:""},
+{id:"h112_3",year:112,no:3,unit:"金屬中心",type:"費用核銷",risk:"mid",
+ deficiency:"會計憑證未經授權長官簽核，違反該中心會計制度第42條規定。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_4",year:112,no:4,unit:"金屬中心",type:"計畫管理",risk:"mid",
+ deficiency:"同仁未於回國後30日內繳交國外出差報告。（累犯：111年初犯仍未改善）",
+ basis:"第4-10項",penalty:"累犯",repeat:true,notes:""},
+{id:"h112_5",year:112,no:5,unit:"金屬中心",type:"研究紀錄",risk:"mid",
+ deficiency:"工時列報計畫與研究紀錄簿填報計畫代號不符（11、12月份誤植其他計畫）。累犯（108年核減0.4%，109年核減0.6%）。",
+ basis:"第4-6項",penalty:"累犯",repeat:true,notes:""},
+{id:"h112_6",year:112,no:6,unit:"金屬中心",type:"差旅費用",risk:"high",
+ deficiency:"旅運費列支住宿費超過每日上限金額2,000元，應減列繳回133,300元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h112_7",year:112,no:7,unit:"金屬中心",type:"差旅費用",risk:"high",
+ deficiency:"工時填列與差旅費報支計畫不符（國外差旅費127,693元，出差期間工時未全數報列該計畫），減列繳回92,577元。（累犯）",
+ basis:"第4-3項",penalty:"減列退繳",repeat:true,notes:""},
+{id:"h112_8",year:112,no:8,unit:"金屬中心",type:"設備管理",risk:"mid",
+ deficiency:"維護費未依設備使用時數分攤費用（非科專計畫亦有使用），應減列繳回2,549元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h112_9",year:112,no:9,unit:"金屬中心",type:"設備管理",risk:"mid",
+ deficiency:"設備使用費未依實際使用時數計算（系統誤將午休1小時計入），應減列繳回27,778元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h112_10",year:112,no:10,unit:"金屬中心",type:"設備管理",risk:"low",
+ deficiency:"次世代醫療器材計畫：季報函文請款帳號/帳戶與契約書不一致。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_11",year:112,no:11,unit:"工研院",type:"差旅費用",risk:"mid",
+ deficiency:"國內出差旅運費報支超過上限（應以上班地點出發核算），應減列退繳2,905元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h112_12",year:112,no:12,unit:"工研院",type:"費用核銷",risk:"low",
+ deficiency:"計畫報支相同審查費用，分別列支於不同二級科目（科目歸屬不一致）。",
+ basis:"第4-10項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_13",year:112,no:13,unit:"工研院",type:"函文程序",risk:"mid",
+ deficiency:"第一期補請款季報金額誤植（公文金額誤植為第一期款）。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_14",year:112,no:14,unit:"設研院",type:"差旅費用",risk:"mid",
+ deficiency:"出差費用核銷逾期（未於出差返回後二週內報支）。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_15",year:112,no:15,unit:"設研院",type:"函文程序",risk:"high",
+ deficiency:"簽約請款函文單位匯款帳戶錯誤（112年3月21日簽約請款來函帳戶錯誤）。",
+ basis:"第4-6項",penalty:"0%",repeat:false,notes:""},
+{id:"h112_16",year:112,no:16,unit:"設研院",type:"差旅費用",risk:"high",
+ deficiency:"支出申請單出差日期與報支憑證日期不符（申請單3/31、4/11，計程車收據為6/20）。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_17",year:112,no:17,unit:"設研院",type:"差旅費用",risk:"high",
+ deficiency:"差旅報支日期與計畫工時不符（多日工時紀錄與差旅費報支不一致），減列繳回15,119元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h112_18",year:112,no:18,unit:"設研院",type:"授權收益",risk:"mid",
+ deficiency:"衍生性收入未依合約及時繳回（111年8月認列收入，遲至112年1月辦理繳庫，逾5個月）。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_19",year:112,no:19,unit:"紡織所",type:"差旅費用",risk:"mid",
+ deficiency:"差旅報支計畫與計畫工時不符（工時列報其他計畫，旅費核銷列於本計畫），減列繳回7,008元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h112_20",year:112,no:20,unit:"紡織所",type:"財產管理",risk:"mid",
+ deficiency:"計畫專戶內存有該所自有資金之定期存款，且利息直接入帳後轉出（不符專戶管理規定）。",
+ basis:"第4-10項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_21",year:112,no:21,unit:"紡織所",type:"費用核銷",risk:"mid",
+ deficiency:"發票稅額誤植（1,092誤植應為1,902元）；統一編號誤植（7碼誤為8碼）。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h112_22",year:112,no:22,unit:"紡織所",type:"採購程序",risk:"mid",
+ deficiency:"計畫列支APP store上架費，但以員工私人名義申請，非以公司名義上架。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:"扣減合計0.5%"},
+
+// ─── 111年度 ─────────────────────────────────
+{id:"h111_1",year:111,no:1,unit:"工研院",type:"費用核銷",risk:"mid",
+ deficiency:"未依實際使用量列報當年度費用：管理費列報購買英語測驗700套，截至年底尚有395套未使用，應減列繳回134,967元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h111_2",year:111,no:2,unit:"工研院",type:"授權收益",risk:"mid",
+ deficiency:"未即時進行授權金稽催：授權金應收日（3月31日）逾半年以上，至10月28日才收款。",
+ basis:"第4-4項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h111_3",year:111,no:3,unit:"工研院",type:"函文程序",risk:"mid",
+ deficiency:"自辦產學合作計畫變更函文金額誤植：契約第一期與第二期費用合計與契約總價不符，且未進行合約修正。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h111_4",year:111,no:4,unit:"工研院",type:"採購程序",risk:"high",
+ deficiency:"未依採購程序辦理：分散採購（多筆購案由同一人在同天分開核銷，超過員工自購限額）。累犯（108年初犯，仍未改善），扣減1.1%。",
+ basis:"第4-1項",penalty:"1.1%",repeat:true,notes:""},
+{id:"h111_5",year:111,no:5,unit:"工研院",type:"函文程序",risk:"high",
+ deficiency:"第一期季報函文未依規定辦理，未先送至法人科專辦公室檢核，直接逕送經濟部。（累犯，扣減0.6%）",
+ basis:"第4-6項",penalty:"0.6%",repeat:true,notes:""},
+{id:"h111_6",year:111,no:6,unit:"工研院",type:"計畫管理",risk:"mid",
+ deficiency:"季報經費累計執行率65.53%，未達請款標準75%（因該院填報金額加總有誤，漏未將應付數計入）。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h111_7",year:111,no:7,unit:"工研院",type:"人事費用",risk:"mid",
+ deficiency:"派遣人力年終獎金未依帳列薪資月份比例計算，應減列繳回69,295元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h111_8",year:111,no:8,unit:"國衛院",type:"費用核銷",risk:"mid",
+ deficiency:"管理費未依規定分攤：(1)備份容量未依規定分期攤銷；(2)設備折舊費用科目歸屬有誤。減列繳回120,119元。",
+ basis:"第4-3項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h111_9",year:111,no:9,unit:"國衛院",type:"授權收益",risk:"mid",
+ deficiency:"衍生收入未依合約規定即時繳回（110年10月收款，未於第四季隨會計月報繳交），延遲繳庫設算孳息149元。",
+ basis:"第4-10項",penalty:"減列退繳",repeat:false,notes:""},
+{id:"h111_10",year:111,no:10,unit:"國衛院",type:"研究紀錄",risk:"high",
+ deficiency:"研究紀錄簿未依規定撰寫、查核簽名（9位同仁共14處違規：未完整撰寫、見證人或計畫主持人未每月簽名）。扣減0.6%。",
+ basis:"第4-6項",penalty:"0.6%",repeat:false,notes:""},
+{id:"h111_11",year:111,no:11,unit:"國衛院",type:"差旅費用",risk:"high",
+ deficiency:"差旅報支與計畫工時不符：(1)報列非計畫人員差旅費；(2)工時漏填致工時表與出差紀錄不一致。扣減0.6%。",
+ basis:"第4-3項",penalty:"0.6%",repeat:false,notes:""},
+
+// ─── 110年度 ─────────────────────────────────
+{id:"h110_1",year:110,no:1,unit:"工研院材化所",type:"工時填報",risk:"mid",
+ deficiency:"列報計畫人員未依參與科專計畫之工作時數填列工時紀錄（工時數與實際投入不符）。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_2",year:110,no:2,unit:"工研院材化所",type:"費用核銷",risk:"mid",
+ deficiency:"成果交付資料僅留存發函紀錄，未留存交貨或驗收紀錄，與自訂規定不符。",
+ basis:"第4-10項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_3",year:110,no:3,unit:"工研院材化所",type:"授權收益",risk:"mid",
+ deficiency:"開立發票日期晚於付款期限日期（未依合約規定日期開立發票收款）。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_4",year:110,no:4,unit:"工研院機械所",type:"函文程序",risk:"high",
+ deficiency:"第一期季報函文：請款帳號/帳戶與契約書不一致（帳戶資訊誤植），扣減0.5%。",
+ basis:"第4-6項",penalty:"0.5%",repeat:false,notes:""},
+{id:"h110_5",year:110,no:5,unit:"工研院材化所",type:"工時填報",risk:"low",
+ deficiency:"訓練申請單未填寫計畫代號，系統無法正常帶入計畫代號。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_6",year:110,no:6,unit:"工研院材化所",type:"工時填報",risk:"mid",
+ deficiency:"訓練申請單計畫代號與工時紀錄表計畫代號不一致（數位訓練課程未記錄工時；課程延後但系統未留移訓軌跡）。（累犯）",
+ basis:"第4-3項",penalty:"累犯",repeat:true,notes:""},
+{id:"h110_7",year:110,no:7,unit:"紡織所",type:"研究紀錄",risk:"mid",
+ deficiency:"研究紀錄簿管理未依規定辦理：抽查人員撰寫頻率與自訂規定不符。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_8",year:110,no:8,unit:"紡織所",type:"研究紀錄",risk:"mid",
+ deficiency:"研究紀錄簿撰寫之投入計畫與工時紀錄不符（記錄計畫與工時計畫不一致）。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_9",year:110,no:9,unit:"紡織所",type:"工時填報",risk:"high",
+ deficiency:"工時管理欠完善：12月份未依實際工時進行調整；工時卡比例與薪資系統比例不符（人員自行進系統修改工時）。",
+ basis:"第4-10項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_10",year:110,no:10,unit:"紡織所",type:"採購程序",risk:"mid",
+ deficiency:"疑有分散採購：同一部門5天內向同一廠商分散為數筆低於5萬元之採購，疑規避正常採購程序。",
+ basis:"第4-1項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_11",year:110,no:11,unit:"紡織所",type:"差旅費用",risk:"mid",
+ deficiency:"國外出差住宿費取消費用誤帳列旅運費（取消住宿之手續費性質應依實際用途以適當科目核銷）。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h110_12",year:110,no:12,unit:"紡織所",type:"差旅費用",risk:"mid",
+ deficiency:"國內訓練申請表及檢核表列報計畫與工時卡列報計畫不符。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+
+// ─── 109年度 ─────────────────────────────────
+{id:"h109_1",year:109,no:1,unit:"資策會",type:"計畫管理",risk:"mid",
+ deficiency:"政策宣導廣告彙總表5則未於規定時間內提報，1項廣告項目誤植為計畫名稱。（累犯：107年已犯）扣減0.1%。",
+ basis:"第4-6項",penalty:"0.1%",repeat:true,notes:""},
+{id:"h109_2",year:109,no:2,unit:"金屬中心",type:"函文程序",risk:"mid",
+ deficiency:"計畫變更函文未依規定辦理，未先送法科辦公室確認函文及附件正確性，直接函送經濟部。初犯警告。",
+ basis:"第4-9項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h109_3",year:109,no:3,unit:"N/A",type:"函文程序",risk:"mid",
+ deficiency:"季報函文未依規定辦理，未先送法科辦公室確認函文及附件內容之正確性，直接函送經濟部。初犯警告。",
+ basis:"第4-9項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h109_4",year:109,no:4,unit:"工研院",type:"採購程序",risk:"mid",
+ deficiency:"員工自購案之核銷作業系統，無法保留事前告知預算權責負責人或徵詢計畫主持人/主管同意之軌跡，無法確認是否符合流程。初犯警告。",
+ basis:"第4-1項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h109_5",year:109,no:5,unit:"工研院",type:"財產管理",risk:"mid",
+ deficiency:"國有動產閒置：部分設備因故障或維修中致108年未能使用。（累犯：106年已列初犯）",
+ basis:"第4-2項",penalty:"累犯",repeat:true,notes:""},
+{id:"h109_6",year:109,no:6,unit:"工研院",type:"授權收益",risk:"mid",
+ deficiency:"技術授權案件生產銷售授權金處理程序未臻完備：未依合約規定請被授權公司提供完整生產紀錄及販賣報告。初犯警告。",
+ basis:"第4-4項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h109_7",year:109,no:7,unit:"工研院",type:"費用核銷",risk:"mid",
+ deficiency:"計畫會計科目歸屬不一致：儀器設備校正或維修等費用，歸屬之會計科目不一致。初犯警告。",
+ basis:"第4-9項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h109_8",year:109,no:8,unit:"工研院",type:"費用核銷",risk:"high",
+ deficiency:"列報非計畫核定期間支出（計畫期間108/5-109/4，卻報支108/4/24之費用），應予減列繳回。（累犯：108年初犯，扣減1.2%）",
+ basis:"第4-3項",penalty:"1.2%",repeat:true,notes:""},
+{id:"h109_9",year:109,no:9,unit:"工研院",type:"差旅費用",risk:"mid",
+ deficiency:"國外出差日支費計算有誤，應予減列繳回。初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h109_10",year:109,no:10,unit:"工研院",type:"人事費用",risk:"mid",
+ deficiency:"派遣人力年終獎金之核銷，部分人員未依全年投入各計畫比率計算，應予減列繳回。初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h109_11",year:109,no:11,unit:"生技中心",type:"研究紀錄",risk:"high",
+ deficiency:"未依規定詳實填載設備使用紀錄簿：(1)計畫別欄位空白；(2)有整批錯誤事後修改情形。（累犯：109年核減管理費0.4%）",
+ basis:"第4-6項",penalty:"0.4%",repeat:true,notes:""},
+{id:"h109_12",year:109,no:12,unit:"生技中心",type:"採購程序",risk:"high",
+ deficiency:"分散採購：同一人於同日以連續號碼估價單採購同型號商品並分開核銷。（累犯：109年已列初犯警告）",
+ basis:"第4-1項",penalty:"累犯",repeat:true,notes:""},
+{id:"h109_13",year:109,no:13,unit:"生技中心",type:"授權收益",risk:"high",
+ deficiency:"未依技轉合約收款時程收款及計收遲延利息（多個合約均逾期收款）。（累犯，扣減3.5%）",
+ basis:"第4-9項",penalty:"3.5%",repeat:true,notes:""},
+{id:"h109_14",year:109,no:14,unit:"生技中心",type:"研究紀錄",risk:"mid",
+ deficiency:"未依規定填寫研究紀錄簿：(1)研究紀錄簿未經主管查閱；(2)部分同仁撰寫篇數低於規定。初犯警告。",
+ basis:"第4-6項",penalty:"初犯警告",repeat:false,notes:""},
+
+// ─── 108年度 ─────────────────────────────────
+{id:"h108_1",year:108,no:1,unit:"工研院",type:"計畫管理",risk:"high",
+ deficiency:"函請本部轉知科發基金繳交德芙生醫股票一案，案內繳交股票金額有誤（108/2/23函）。扣減1.8%。",
+ basis:"第4-9項",penalty:"1.8%",repeat:false,notes:""},
+{id:"h108_2",year:108,no:2,unit:"工研院",type:"差旅費用",risk:"mid",
+ deficiency:"經費核銷未確實，致計畫於結案後繳回溢列差旅費（108/8/20函）。初犯警告。",
+ basis:"第4-9項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h108_3",year:108,no:3,unit:"工研院",type:"差旅費用",risk:"mid",
+ deficiency:"外出參加訓練報支雜費（除交通費外不得報支雜費），應予減列繳回。初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h108_4",year:108,no:4,unit:"工研院",type:"差旅費用",risk:"mid",
+ deficiency:"簽核國外出差天數與實際狀況不符（電子簽核平台勾選與計畫書不一致，實際比計畫多5天）。初犯警告。",
+ basis:"第4-9項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h108_5",year:108,no:5,unit:"工研院",type:"差旅費用",risk:"mid",
+ deficiency:"國內出差未依規定事前申請（申請晚於出差時間），或差旅費核銷期限逾期（逾15日才結報）。初犯警告。",
+ basis:"第4-9項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h108_6",year:108,no:6,unit:"工研院",type:"研究紀錄",risk:"mid",
+ deficiency:"研究紀錄簿未依規定撰寫或計畫填寫有誤（內容與研究工作無關；計畫代號與工時資料有差異）。（累犯：106年核減0.5%）",
+ basis:"第4-6項",penalty:"累犯",repeat:true,notes:""},
+{id:"h108_7",year:108,no:7,unit:"工研院",type:"採購程序",risk:"high",
+ deficiency:"分散採購：同一人或組於同天之多筆採購，分開核銷。（累犯：108年初犯仍未改善）",
+ basis:"第4-1項",penalty:"累犯",repeat:true,notes:""},
+{id:"h108_8",year:108,no:8,unit:"工研院",type:"授權收益",risk:"mid",
+ deficiency:"未依技轉合約收款時程收款及計收遲延利息（部分技轉案件實際收款逾合約時程，亦未依違約效果計收利息）。（累犯：107年核減0.1%）",
+ basis:"第4-9項",penalty:"累犯",repeat:true,notes:""},
+{id:"h108_9",year:108,no:9,unit:"金屬中心",type:"採購程序",risk:"high",
+ deficiency:"辦理科研採購，未落實利益衝突迴避審查規定（審計部查核），不利促進科研採購公平性。扣減5.1%。",
+ basis:"第5項",penalty:"5.1%",repeat:false,notes:""},
+{id:"h108_10",year:108,no:10,unit:"金屬中心",type:"費用核銷",risk:"mid",
+ deficiency:"經費集中於年底支付：部分計畫107年10至12月支用占全年度4至6成以上。初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h108_11",year:108,no:11,unit:"工研院",type:"計畫管理",risk:"mid",
+ deficiency:"分包委託案件憑證審查機制仍待改進（分包預算流用未設限制；核銷文件科目與預算科目不一致）。（累犯：107年初犯）",
+ basis:"第4-9項",penalty:"累犯",repeat:true,notes:""},
+
+// ─── 107年度 ─────────────────────────────────
+{id:"h107_1",year:107,no:1,unit:"工研院",type:"採購程序",risk:"high",
+ deficiency:"原始憑證日期早於請購單及訂購單日期，與該院採購辦法作業流程不符。扣減5.6%。",
+ basis:"第4-1項",penalty:"5.6%",repeat:false,notes:""},
+{id:"h107_2",year:107,no:2,unit:"工研院",type:"採購程序",risk:"mid",
+ deficiency:"未依採購程序辦理：多筆購案由同一人或組於同天採購，超過員工自購限額5,000元，應由專責部門採購。初犯警告。",
+ basis:"第4-1項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h107_3",year:107,no:3,unit:"工研院",type:"設備管理",risk:"mid",
+ deficiency:"未依設備使用記錄簿所載各計畫使用比率計算設備使用費，應予減列繳回。（累犯：104年核減0.5%）",
+ basis:"第4-2項",penalty:"累犯",repeat:true,notes:""},
+{id:"h107_4",year:107,no:4,unit:"工研院",type:"設備管理",risk:"mid",
+ deficiency:"由科專經費支應使用費之設備並無實際使用紀錄（當月無使用卻計算使用費），應予減列繳回。（累犯：103年已核減）",
+ basis:"第4-2項",penalty:"累犯",repeat:true,notes:""},
+{id:"h107_5",year:107,no:5,unit:"工研院",type:"費用核銷",risk:"high",
+ deficiency:"列支與計畫執行無關費用（採購安全防護衣，但憑證品名為鞋品）。（3度累犯，酌予調整扣減1%）",
+ basis:"第4-3項",penalty:"1%",repeat:true,notes:""},
+{id:"h107_6",year:107,no:6,unit:"工研院",type:"計畫管理",risk:"mid",
+ deficiency:"資本門設備未能於驗收日前專案報部辦理展延驗收日期。初犯警告。",
+ basis:"第2-1項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h107_7",year:107,no:7,unit:"工研院",type:"授權收益",risk:"mid",
+ deficiency:"未依技轉合約收款時程收款。（累犯：102、106年已核減）",
+ basis:"第4-9項",penalty:"累犯",repeat:true,notes:""},
+{id:"h107_8",year:107,no:8,unit:"金屬中心",type:"採購程序",risk:"high",
+ deficiency:"採購作業與相關規定不符：多筆購案疑似分散採購（超過5萬元門檻但分開採購）；申購單需求日期早於計畫起始日。（累犯：105年初犯）扣減10.9%。",
+ basis:"第4-1項",penalty:"10.9%",repeat:true,notes:""},
+{id:"h107_9",year:107,no:9,unit:"金屬中心",type:"研究紀錄",risk:"mid",
+ deficiency:"研究紀錄簿未依規定撰寫、查閱或內容相同（部分人員未依規定撰寫；部分人員內容幾乎複製計畫書）。（累犯：104年核減0.2%）",
+ basis:"第4-6項",penalty:"累犯",repeat:true,notes:""},
+{id:"h107_10",year:107,no:10,unit:"資策會",type:"計畫管理",risk:"mid",
+ deficiency:"參與台電採購未召開標案審查會議釐清是否有與民爭利之質疑（事後確認已召開，建議不扣減）。扣減0.2%。",
+ basis:"第4-9項",penalty:"0.2%",repeat:false,notes:""},
+
+// ─── 106年度 ─────────────────────────────────
+{id:"h106_1",year:106,no:1,unit:"工研院",type:"計畫管理",risk:"high",
+ deficiency:"細部計畫書品質不佳，細審時仍發現繕打錯誤（本年已通知各單位注意計畫書品質，仍未改善）。扣減2.8%。",
+ basis:"第4-9項",penalty:"2.8%",repeat:false,notes:""},
+{id:"h106_2",year:106,no:2,unit:"工研院",type:"計畫管理",risk:"mid",
+ deficiency:"未依規定辦理出版品，逕行付印且未經許可使用本部標誌（違反出版品管理作業規定）。初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h106_3",year:106,no:3,unit:"工研院",type:"計畫管理",risk:"mid",
+ deficiency:"提供立法院預算中心107年度中央政府總預算案內容，工研院提供機器及儀器等設備支出來自法人科專之獎補助數據錯誤。（涉及立院審議預算，建議扣減）",
+ basis:"第4-8項",penalty:"建議扣減",repeat:false,notes:""},
+{id:"h106_4",year:106,no:4,unit:"工研院",type:"工時填報",risk:"mid",
+ deficiency:"訓練費列報計畫與工時列報計畫不一致（受訓計畫與費用歸屬計畫不同），應予減列繳回。初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h106_5",year:106,no:5,unit:"工研院",type:"人事費用",risk:"mid",
+ deficiency:"人事費調整未依規定辦理且無具體證明（年底方才進行工時調整，且調整無具體證明），相關人事費應予減列繳回。初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h106_6",year:106,no:6,unit:"工研院",type:"費用核銷",risk:"mid",
+ deficiency:"列報非計畫執行所需之費用（微波爐、電鍋、日語課程；文具從其他計畫調整轉入無具體理由）。（累犯：102、103、106年均已核減）",
+ basis:"第4-3項",penalty:"累犯",repeat:true,notes:""},
+{id:"h106_7",year:106,no:7,unit:"工研院",type:"差旅費用",risk:"mid",
+ deficiency:"核銷演講費逾本部所訂標準（外聘講師每人5,000元，逾每小時4,000元上限），超限金額應予減列繳回。（累犯）",
+ basis:"第4-3項",penalty:"累犯",repeat:true,notes:""},
+{id:"h106_8",year:106,no:8,unit:"中科院",type:"計畫管理",risk:"mid",
+ deficiency:"資本門設備採購申請採購時程展延，應於6月底完成決標及簽約，但7月始提出展延申請。扣減0.3%。",
+ basis:"第2-1項",penalty:"0.3%",repeat:false,notes:""},
+{id:"h106_9",year:106,no:9,unit:"工研院",type:"授權收益",risk:"mid",
+ deficiency:"未依契約規定時程收款（部分專利授權款項截至期限仍未完成向廠商收款）。（累犯：102、106年已核減）",
+ basis:"第4-9項",penalty:"累犯",repeat:true,notes:""},
+
+// ─── 105年度 ─────────────────────────────────
+{id:"h105_1",year:105,no:1,unit:"工研院",type:"計畫管理",risk:"high",
+ deficiency:"執行人體試驗計畫，經聯合人體試驗委員會審查認定有缺失（執行光環境人因需求研究）。扣減3%。",
+ basis:"第4-9項",penalty:"3%",repeat:false,notes:""},
+{id:"h105_2",year:105,no:2,unit:"工研院電光所",type:"計畫管理",risk:"mid",
+ deficiency:"執行LED智慧化照明人體試驗，結案報告聯合人體試驗委員會審查發現缺失。扣減0.5%。",
+ basis:"第4-9項",penalty:"0.5%",repeat:false,notes:""},
+{id:"h105_3",year:105,no:3,unit:"工研院院本部",type:"費用核銷",risk:"mid",
+ deficiency:"管理費預付次年度費用而列為當年度費用（跨年度廣告費未轉列預付費用）。（累犯：100年已核減）",
+ basis:"第4-3項",penalty:"累犯",repeat:true,notes:""},
+{id:"h105_4",year:105,no:4,unit:"工研院院本部",type:"費用核銷",risk:"high",
+ deficiency:"管理費列支非屬科專計畫應負擔之費用（自行研發之專利權攤銷）。（4度累犯：101、102、104年均已核減）",
+ basis:"第4-3項",penalty:"4度累犯",repeat:true,notes:""},
+{id:"h105_5",year:105,no:5,unit:"工研院材化所",type:"研究紀錄",risk:"mid",
+ deficiency:"研究紀錄簿未依規定撰寫及核閱（計畫主持人未依規定每月查閱下屬之研究紀錄簿）。（累犯：101年已核減，扣減0.2%）",
+ basis:"第4-6項",penalty:"0.2%",repeat:true,notes:""},
+{id:"h105_6",year:105,no:6,unit:"中科院飛彈所",type:"差旅費用",risk:"mid",
+ deficiency:"出差旅費及訓練費之列報計畫與工時紀錄不一致（費用與工時計畫不符），應予減列。初犯警告，扣減0.9%。",
+ basis:"第4-3項",penalty:"0.9%",repeat:false,notes:""},
+{id:"h105_7",year:105,no:7,unit:"中科院飛彈所",type:"差旅費用",risk:"low",
+ deficiency:"核銷國內旅費之雜費逾規定標準（超過每日400元限額，103年7月修正）。初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+
+// ─── 104年度 ─────────────────────────────────
+{id:"h104_1",year:104,no:1,unit:"工研院技轉中心",type:"計畫管理",risk:"mid",
+ deficiency:"提供立法院科技專案工研院等20個法人專利維護事項報告，填報數據與預算中心不一致。扣減0.3%。",
+ basis:"第4-8項",penalty:"0.3%",repeat:false,notes:""},
+{id:"h104_2",year:104,no:2,unit:"工研院院本部",type:"財產管理",risk:"mid",
+ deficiency:"3DIC實驗室設備深紫外光曝光機，79、80年無計畫使用（設備閒置），致審計部二次函復要求說明設備使用效益。扣減2.8%。",
+ basis:"第4-9項",penalty:"2.8%",repeat:false,notes:""},
+{id:"h104_3",year:104,no:3,unit:"工研院院本部",type:"研究紀錄",risk:"high",
+ deficiency:"研究記錄簿未依規定撰寫及核閱（7人撰寫頻率不足、2人錯誤處未簽名、3人未劃去空白處、5人計畫主持人查閱頻率不足、6人單位主管查閱頻率不足）。（5度累犯：99-102年均已核減）",
+ basis:"第4-6項",penalty:"5度累犯",repeat:true,notes:""},
+{id:"h104_4",year:104,no:4,unit:"工研院院本部",type:"研究紀錄",risk:"mid",
+ deficiency:"工時記錄與研究紀錄簿不符（部分人員工時計畫與研究紀錄簿撰寫計畫不符）。（累犯：99-100年已核減）",
+ basis:"第4-3項",penalty:"累犯",repeat:true,notes:""},
+{id:"h104_5",year:104,no:5,unit:"工研院電光所",type:"設備管理",risk:"mid",
+ deficiency:"設備使用紀錄與使用人列報工時不符（自有財產設備使用計畫與工時計畫不一致）。新增缺失態樣，初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h104_6",year:104,no:6,unit:"中科院化學所",type:"計畫管理",risk:"mid",
+ deficiency:"設備採購未依計畫書規劃決標日期完成，延至兩個月後函文辦理展延。扣減0.8%。",
+ basis:"第4-9項",penalty:"0.8%",repeat:false,notes:""},
+{id:"h104_7",year:104,no:7,unit:"生技中心",type:"研究紀錄",risk:"mid",
+ deficiency:"研究記錄簿未依規定撰寫（8人紀錄本內頁記錄起始日早於領用日期，未及時領用及記載實驗記錄）。（3度累犯：99、100年已核減）",
+ basis:"第4-6項",penalty:"累犯",repeat:true,notes:""},
+{id:"h104_8",year:104,no:8,unit:"生技中心",type:"差旅費用",risk:"mid",
+ deficiency:"列報出差與工時計畫不一致（工時計畫與差旅費列報計畫不符），費用重新歸屬後有結餘應繳回。新增缺失態樣，初犯警告。",
+ basis:"第4-3項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h104_9",year:104,no:9,unit:"食品所",type:"授權收益",risk:"high",
+ deficiency:"未確實督促廠商依約繳納技轉授權金及權利金（臭豆腐技術移轉合約，一再展延繳款）。扣減1.9%。",
+ basis:"第4-4項",penalty:"1.9%",repeat:false,notes:""},
+
+// ─── 103年度 ─────────────────────────────────
+{id:"h103_1",year:103,no:1,unit:"工研院技轉中心",type:"計畫管理",risk:"mid",
+ deficiency:"提供立法院科技專案法人專利維護事項報告，填報數據與預算中心不一致。扣減0.3%。",
+ basis:"第4-8項",penalty:"0.3%",repeat:false,notes:""},
+{id:"h103_2",year:103,no:2,unit:"工研院材化所",type:"財產管理",risk:"mid",
+ deficiency:"函請辦理設備報廢（二次中性粒子質譜儀），未能詳細說明報廢理由及使用效益，致審計部二次函復要求提供資料。扣減0.8%。",
+ basis:"第4-2項",penalty:"0.8%",repeat:false,notes:""},
+{id:"h103_3",year:103,no:3,unit:"金屬中心",type:"計畫管理",risk:"high",
+ deficiency:"未於年度結束前達成推動協助業者申請通過地方產業創新研發聯盟之要求件數。扣減3.9%。",
+ basis:"第4-9項",penalty:"3.9%",repeat:false,notes:""},
+{id:"h103_4",year:103,no:4,unit:"金屬中心",type:"研究紀錄",risk:"high",
+ deficiency:"研究記錄簿未依規定撰寫（多人使用立可白塗改；未劃去剩餘空白；附加物件未依規定簽名；撰寫頻率不足等多項缺失）。（累犯：99年已核減）",
+ basis:"第4-6項",penalty:"累犯",repeat:true,notes:""},
+{id:"h103_5",year:103,no:5,unit:"中科院化學所",type:"函文程序",risk:"mid",
+ deficiency:"資本門採購未依採購程序辦理，延至計畫原結束日期後3個月（未配合採購程序辦理）。",
+ basis:"第1-7項",penalty:"初犯",repeat:false,notes:""},
+{id:"h103_6",year:103,no:6,unit:"資策會",type:"計畫管理",risk:"mid",
+ deficiency:"立法院科技專案法人專利維護報告，資策會填報數據與預算中心不一致。扣減1.1%。",
+ basis:"第4-8項",penalty:"1.1%",repeat:false,notes:""},
+{id:"h103_7",year:103,no:7,unit:"食品所",type:"授權收益",risk:"high",
+ deficiency:"審計部查核：未確實督促廠商依約繳納技術移轉金額，加強應收帳款管理、跟催廠商依約繳納技轉授權金。扣減1.9%。",
+ basis:"第4-4項",penalty:"1.9%",repeat:false,notes:""},
+{id:"h103_8",year:103,no:8,unit:"生技中心",type:"計畫管理",risk:"high",
+ deficiency:"提供立法院報告，未於指定期限內召開自評會議（18個法人中最後完成，且未確實核對財務數據）。扣減5.5%。",
+ basis:"第4-8項",penalty:"5.5%",repeat:false,notes:""},
+{id:"h103_9",year:103,no:9,unit:"生技中心",type:"財產管理",risk:"mid",
+ deficiency:"依103年科專執行單位業務使用國有動產設備盤點查核建議事項，列為管理缺失。（累犯：101、102年已核減，第4次累犯）",
+ basis:"第4-2項",penalty:"累犯",repeat:true,notes:""},
+
+// ─── 102年度 ─────────────────────────────────
+{id:"h102_1",year:102,no:1,unit:"工研院院本部",type:"計畫管理",risk:"mid",
+ deficiency:"101年第1季「避免與民爭利檢視表」逾期提報。初犯警告，扣減0.5%。",
+ basis:"第4-6項",penalty:"0.5%",repeat:false,notes:""},
+{id:"h102_2",year:102,no:2,unit:"工研院院本部",type:"計畫管理",risk:"mid",
+ deficiency:"立法院科技專案補助財團法人業務成果財務規劃報告：工研院逾限繳交（18家法人中最後一家），且通知後仍未確實核對財務數據。",
+ basis:"第4-8項",penalty:null,repeat:false,notes:""},
+{id:"h102_3",year:102,no:3,unit:"工研院院本部",type:"函文程序",risk:"mid",
+ deficiency:"計畫變更函文未先送法科辦公室，直接函送經濟部（違反09603469750號函規定）。初犯警告。",
+ basis:"第4-9項",penalty:"初犯警告",repeat:false,notes:""},
+{id:"h102_4",year:102,no:4,unit:"工研院服科中心",type:"函文程序",risk:"mid",
+ deficiency:"未依契約規定於前一期結束後20日內提繳季報（郵戳逾期提繳）。初犯警告，扣減0%。",
+ basis:"第4-6項",penalty:"0%",repeat:false,notes:""},
+{id:"h102_5",year:102,no:5,unit:"工研院產經中心",type:"計畫管理",risk:"high",
+ deficiency:"計畫轉委託研究未於當期季報備查，且第3期季報內容填報不完備，計畫管控不佳。扣減1.5%。",
+ basis:"第2-3項",penalty:"1.5%",repeat:false,notes:""},
+{id:"h102_6",year:102,no:6,unit:"工研院南分院",type:"研究紀錄",risk:"mid",
+ deficiency:"部分研究紀錄簿未依規定撰寫及審閱（36名計畫人員中發現有未依規定撰寫及主管未依規定查閱之情形）。扣減1%。",
+ basis:"第4-6項",penalty:"1%",repeat:false,notes:""},
+{id:"h102_7",year:102,no:7,unit:"工研院國際中心",type:"計畫管理",risk:"mid",
+ deficiency:"院列管計畫期中成果報告品質不佳，影響本部推動業務（亦有提供資料延誤、推動時落後等問題）。扣減0.5%。",
+ basis:"第4-6項",penalty:"0.5%",repeat:false,notes:""},
+{id:"h102_8",year:102,no:8,unit:"中科院化學所",type:"函文程序",risk:"mid",
+ deficiency:"未依公文09603469750函辦理，計畫變更函文未先送法科辦公室，直接函送經濟部。（累犯：97年已核減，第2次累犯）",
+ basis:"第4-9項",penalty:"累犯",repeat:true,notes:""},
+];
+
+// ═══════════════════════════════════════════════════════
+//  歷年缺失 View State & Helpers
+// ═══════════════════════════════════════════════════════
+let activeView = 'qa';
+let activeYear = 114;
+let activeHType = 'all';
+
+const YEARS = [114,112,111,110,109,108,107,106,105,104,103,102];
+const HIST_TYPES = ['全部類型','研究紀錄','工時填報','採購程序','差旅費用','設備管理','函文程序','費用核銷','授權收益','計畫管理','財產管理','人事費用'];
+
+function setView(v) {
+  activeView = v;
+  document.getElementById('vtab-qa').classList.toggle('active', v === 'qa');
+  document.getElementById('vtab-history').classList.toggle('active', v === 'history');
+  ['catSection','riskSection'].forEach(id => {
+    document.getElementById(id).style.display = v === 'qa' ? '' : 'none';
+  });
+  ['yearSection','htypeSection'].forEach(id => {
+    document.getElementById(id).style.display = v === 'history' ? '' : 'none';
+  });
+  document.getElementById('results').style.display = v === 'qa' ? '' : 'none';
+  document.getElementById('histResults').style.display = v === 'history' ? '' : 'none';
+  document.querySelector('.principle-banner').style.display = v === 'qa' ? '' : 'none';
+  if (v === 'qa') { buildSidebar(); render(); }
+  else { buildHistSidebar(); renderHistory(); }
+}
+
+function buildHistSidebar() {
+  const yl = document.getElementById('yearList');
+  const allBtn = `<button class="year-btn${activeYear==='all'?' active':''}" onclick="setYear('all')">全部年度<span class="cat-count">${HIST_DB.length}</span></button>`;
+  const yearBtns = YEARS.map(y => {
+    const cnt = HIST_DB.filter(d => d.year === y).length;
+    return `<button class="year-btn${activeYear===y?' active':''}" onclick="setYear(${y})">${y}年度<span class="cat-count">${cnt}</span></button>`;
+  });
+  yl.innerHTML = allBtn + yearBtns.join('');
+  const tl = document.getElementById('htypeList');
+  tl.innerHTML = HIST_TYPES.map(t => {
+    const key = t === '全部類型' ? 'all' : t;
+    const cnt = t === '全部類型'
+      ? (activeYear === 'all' ? HIST_DB.length : HIST_DB.filter(d => d.year === activeYear).length)
+      : HIST_DB.filter(d => d.type === t && (activeYear === 'all' || d.year === activeYear)).length;
+    return `<button class="risk-btn${activeHType===key?' active':''}" onclick="setHType('${key}')">
+      <span class="risk-dot" style="background:${typeColor(t)}"></span>${t}
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:0.6;margin-left:auto">${cnt}</span>
+    </button>`;
+  }).join('');
+}
+
+function typeColor(t) {
+  const m = {'研究紀錄':'#7C3AED','工時填報':'#2563AB','採購程序':'#DC2626','差旅費用':'#D97706','設備管理':'#059669','函文程序':'#0891B2','費用核銷':'#EA580C','授權收益':'#9333EA','計畫管理':'#1D4ED8','財產管理':'#15803D','人事費用':'#B45309','全部類型':'#9CA3AF'};
+  return m[t] || '#9CA3AF';
+}
+
+function setYear(y) { activeYear = y; buildHistSidebar(); renderHistory(); }
+function setHType(t) { activeHType = t; buildHistSidebar(); renderHistory(); }
+
+function histScore(item) {
+  if (activeYear !== 'all' && item.year !== activeYear) return -1;
+  if (activeHType !== 'all' && item.type !== activeHType) return -1;
+  if (!query) return 1;
+  const q = query.toLowerCase();
+  const matchText = [item.deficiency, item.unit, item.type, String(item.year), item.notes||'', item.basis||''].some(s => s && s.toLowerCase().includes(q));
+  return matchText ? 1 : -1;
+}
+
+function penaltyHtml(item) {
+  if (!item.penalty) return '';
+  if (item.penalty === '初犯警告' || item.penalty === '0%') return `<span class="penalty-badge" style="background:#FFEDD5;color:#9A3412">初犯警告</span>`;
+  if (item.penalty === '累犯') return `<span class="repeat-badge">累犯</span>`;
+  if (item.penalty === '減列退繳') return `<span class="penalty-badge penalty-yes">減列退繳</span>`;
+  if (item.penalty === '建議扣減') return `<span class="penalty-badge" style="background:#FEF3C7;color:#92400E">建議扣減</span>`;
+  if (item.penalty.includes('度累犯')) return `<span class="repeat-badge">${item.penalty}</span>`;
+  return `<span class="penalty-badge penalty-yes">扣減 ${item.penalty}</span>`;
+}
+
+function renderHistory() {
+  const matches = HIST_DB.filter(it => histScore(it) > 0);
+  const q2 = query;
+  const yearLabel = activeYear === 'all' ? '全部年度' : `${activeYear}年度`;
+  const typeLabel = activeHType === 'all' ? '' : ` · ${activeHType}`;
+  document.getElementById('resultsInfo').innerHTML =
+    `${yearLabel}${typeLabel} — 共 <strong>${matches.length}</strong> 筆管理缺失記錄`;
+  const res = document.getElementById('histResults');
+  if (!matches.length) {
+    res.innerHTML = `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-text">找不到相關記錄</div><div class="empty-sub">請嘗試其他關鍵字或調整篩選條件</div></div>`;
+    return;
+  }
+  let html = '';
+  if (activeYear === 'all') {
+    YEARS.forEach(y => {
+      const yItems = matches.filter(m => m.year === y);
+      if (!yItems.length) return;
+      html += `<div class="year-divider"><span class="year-divider-label">▎ ${y}年度 &nbsp;·&nbsp; ${yItems.length} 筆</span><hr></div>`;
+      html += yItems.map(item => histCardHtml(item, q2)).join('');
+    });
+  } else {
+    html = matches.map(item => histCardHtml(item, q2)).join('');
+  }
+  res.innerHTML = html;
+}
+
+function histCardHtml(item, q2) {
+  const pen = penaltyHtml(item);
+  const repeatBadge = item.repeat && item.penalty !== '累犯' ? `<span class="repeat-badge">累犯</span>` : '';
+  const noteHtml = item.notes ? `<div class="hist-note">📌 ${hl(item.notes, q2)}</div>` : '';
+  return `<div class="hist-card">
+    <div class="hist-head">
+      <span class="year-badge">${item.year}年</span>
+      <span class="hist-type" style="border-color:${typeColor(item.type)}20;color:${typeColor(item.type)}">${item.type}</span>
+      ${pen}${repeatBadge}
+      <span class="hist-unit">${item.unit}</span>
+    </div>
+    <div class="hist-text">${hl(item.deficiency, q2)}</div>
+    ${noteHtml}
+    <div class="hist-basis">核減依據 · ${item.basis}</div>
+  </div>`;
+}
+</script>
+</body>
+</html>
